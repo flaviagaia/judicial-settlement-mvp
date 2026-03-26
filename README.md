@@ -350,19 +350,19 @@ Além da demo funcional, a interface foi desenhada para servir como artefato de 
 
 **1. Entrada do PDF, revisão manual e extração estruturada**
 
-![Tela 1](/Users/flaviagaia/Documents/CV_FLAVIA_CODEX/judicial-settlement-mvp/assets/proposta.jpg)
+![Tela 1](assets/proposta.jpg)
 
 **2. Enriquecimento externo, histórico comparável e features do score**
 
-![Tela 2](/Users/flaviagaia/Documents/CV_FLAVIA_CODEX/judicial-settlement-mvp/assets/proposta2.jpg)
+![Tela 2](assets/proposta2.jpg)
 
 **3. Grafo relacional com processos semelhantes e hover explicativo**
 
-![Tela 3](/Users/flaviagaia/Documents/CV_FLAVIA_CODEX/judicial-settlement-mvp/assets/proposta3.jpg)
+![Tela 3](assets/proposta3.jpg)
 
 **4. Proposta final com score, explicação e racional técnico**
 
-![Tela 4](/Users/flaviagaia/Documents/CV_FLAVIA_CODEX/judicial-settlement-mvp/assets/proposta4.jpg)
+![Tela 4](assets/proposta4.jpg)
 
 ## Resultado demonstrado pelo MVP
 
@@ -382,13 +382,13 @@ Exemplo de saída do pipeline:
 process_number: 0839393-11.2025.8.19.0001
 defendant: Energia Leste S.A.
 similar_cases_found: 5
-acceptance_probability: 0.9428
+acceptance_probability: 0.8358
 suggested_cash_value: 8607.84
 installment_count: 6
 suggested_installment_value: 1549.41
 sources_used: 4
-graph_nodes: 13
-graph_edges: 17
+graph_nodes: 10
+graph_edges: 22
 ```
 
 ## Leitura correta das métricas e do score
