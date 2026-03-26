@@ -236,7 +236,7 @@ with tab3:
     st.subheader("Relações jurídicas e contexto relacional")
     st.plotly_chart(graph_figure, use_container_width=True)
     st.caption(
-        "O grafo mostra o processo atual ligado a partes, classe, assunto, tribunal e casos historicamente semelhantes."
+        "O grafo mostra o processo atual ligado a partes, classe, assunto, tribunal e casos historicamente semelhantes. Passe o mouse nos nós e nas conexões para ver a base da relação."
     )
     st.markdown("**Leitura técnica do grafo**")
     st.markdown(
