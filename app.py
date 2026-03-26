@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import base64
 from pathlib import Path
 
 import pandas as pd
@@ -33,6 +34,22 @@ def _save_upload(uploaded_file) -> Path:
     destination = runtime_uploads / uploaded_file.name
     destination.write_bytes(uploaded_file.getbuffer())
     return destination
+
+
+def _render_pdf_preview(pdf_path: Path, height: int = 720) -> None:
+    pdf_bytes = pdf_path.read_bytes()
+    encoded = base64.b64encode(pdf_bytes).decode("utf-8")
+    st.markdown(
+        f"""
+        <iframe
+            src="data:application/pdf;base64,{encoded}"
+            width="100%"
+            height="{height}"
+            style="border:1px solid rgba(255,255,255,.12); border-radius:12px; background:white;"
+        ></iframe>
+        """,
+        unsafe_allow_html=True,
+    )
 
 
 history, sample_pdfs = ensure_demo_assets()
@@ -102,14 +119,36 @@ col4.metric("Casos similares", str(len(artifacts.enrichment.similar_cases)))
 tab1, tab2, tab3, tab4 = st.tabs(["PDF e extração", "Enriquecimento", "Grafo", "Proposta final"])
 
 with tab1:
-    st.subheader("Campos estruturados extraídos do PDF")
-    extracted_df = pd.DataFrame([artifacts.extracted_case.model_dump()])
-    st.dataframe(extracted_df, use_container_width=True)
+    st.subheader("Revisão manual do PDF e da extração")
+    left, right = st.columns([1.15, 1])
+    with left:
+        st.markdown("**Preview do documento**")
+        st.caption("Use esta visualização para comparar manualmente o PDF com a leitura do sistema.")
+        _render_pdf_preview(pdf_path)
+    with right:
+        st.markdown("**Campos estruturados extraídos do PDF**")
+        extracted_df = pd.DataFrame([artifacts.extracted_case.model_dump()])
+        st.dataframe(extracted_df, use_container_width=True, height=420)
+        st.markdown("**Checklist de validação manual**")
+        checklist_df = pd.DataFrame(
+            [
+                {"campo": "Número CNJ", "valor_extraido": artifacts.extracted_case.process_number},
+                {"campo": "Classe processual", "valor_extraido": artifacts.extracted_case.case_class},
+                {"campo": "Assunto", "valor_extraido": artifacts.extracted_case.subject},
+                {"campo": "Autor(a)", "valor_extraido": artifacts.extracted_case.plaintiff},
+                {"campo": "Ré(u)", "valor_extraido": artifacts.extracted_case.defendant},
+                {"campo": "Valor da causa", "valor_extraido": f"R$ {artifacts.extracted_case.claim_value:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")},
+                {"campo": "Fase", "valor_extraido": artifacts.extracted_case.phase},
+                {"campo": "Pedido principal", "valor_extraido": artifacts.extracted_case.requested_relief},
+            ]
+        )
+        st.dataframe(checklist_df, use_container_width=True, height=280)
     st.markdown("**Leitura técnica**")
     st.markdown(
         """
         - Nesta versão, a leitura do documento usa `pypdf` e parsing por padrões.
         - Os campos extraídos representam a **camada canônica mínima** do caso.
+        - O preview do PDF permite validação humana antes de confiar na proposta final.
         - Em produção, esta etapa pode ser substituída por OCR real, chunking documental e extração orientada a schema.
         """
     )
