@@ -42,6 +42,20 @@ st.caption(
     "Upload do PDF, enriquecimento de dados, grafo relacional, casos similares e proposta explicável."
 )
 
+with st.expander("Visão técnica da arquitetura", expanded=False):
+    st.markdown(
+        """
+        **Pipeline demonstrado neste MVP**
+        1. Ingestão do PDF e extração de campos estruturados.
+        2. Consolidação do caso em uma representação canônica.
+        3. Enriquecimento com histórico comparável e sinais externos simulados.
+        4. Recuperação de casos similares por `TF-IDF + cosine similarity`.
+        5. Montagem de um grafo relacional com entidades e comparáveis.
+        6. Score baseline com `Logistic Regression`.
+        7. Geração de proposta à vista e parcelada com justificativa técnica.
+        """
+    )
+
 with st.sidebar:
     st.subheader("Entrada do caso")
     selected_sample = st.selectbox(
@@ -50,6 +64,17 @@ with st.sidebar:
         index=1,
     )
     uploaded_pdf = st.file_uploader("Enviar PDF do processo", type=["pdf"])
+    st.divider()
+    st.subheader("Premissas do MVP")
+    st.caption("Camada de dados e modelagem usada nesta versão.")
+    st.markdown(
+        """
+        - Base histórica controlada com acordos e não-acordos.
+        - Enriquecimento externo simulado, inspirado em conectores reais.
+        - Grafo relacional para contexto e explicabilidade.
+        - Modelo baseline tabular focado em legibilidade técnica.
+        """
+    )
 
 pdf_path: Path | None = None
 if uploaded_pdf is not None:
@@ -64,6 +89,9 @@ if not pdf_path:
 artifacts = run_pipeline(pdf_path)
 graph = build_case_graph(artifacts.extracted_case, artifacts.enrichment.similar_cases)
 graph_figure = graph_to_plotly(graph)
+feature_row = artifacts.enrichment.feature_row.copy()
+feature_row_display = feature_row.T.reset_index()
+feature_row_display.columns = ["feature", "value"]
 
 col1, col2, col3, col4 = st.columns(4)
 col1.metric("Chance estimada de aceite", f"{artifacts.proposal.acceptance_probability * 100:.1f}%")
@@ -77,12 +105,40 @@ with tab1:
     st.subheader("Campos estruturados extraídos do PDF")
     extracted_df = pd.DataFrame([artifacts.extracted_case.model_dump()])
     st.dataframe(extracted_df, use_container_width=True)
+    st.markdown("**Leitura técnica**")
+    st.markdown(
+        """
+        - Nesta versão, a leitura do documento usa `pypdf` e parsing por padrões.
+        - Os campos extraídos representam a **camada canônica mínima** do caso.
+        - Em produção, esta etapa pode ser substituída por OCR real, chunking documental e extração orientada a schema.
+        """
+    )
     with st.expander("Texto bruto extraído"):
         st.text(artifacts.extracted_case.raw_text)
 
 with tab2:
     st.subheader("Fontes externas e histórico usado para enriquecer a base")
     st.dataframe(artifacts.enrichment.external_snapshot, use_container_width=True)
+    left, right = st.columns([1.1, 1])
+    with left:
+        st.markdown("**Features consolidadas para o score**")
+        st.dataframe(feature_row_display, use_container_width=True)
+    with right:
+        st.markdown("**Resumo técnico da base histórica**")
+        st.dataframe(
+            pd.DataFrame(
+                [
+                    {
+                        "historical_cases": len(history),
+                        "accepted_cases": int(history["agreement_accepted"].sum()),
+                        "non_accepted_cases": int((history["agreement_accepted"] == 0).sum()),
+                        "unique_defendants": history["defendant"].nunique(),
+                        "unique_subjects": history["subject"].nunique(),
+                    }
+                ]
+            ),
+            use_container_width=True,
+        )
     st.markdown("**Casos similares recuperados**")
     st.dataframe(
         artifacts.enrichment.similar_cases[
@@ -100,12 +156,24 @@ with tab2:
         ],
         use_container_width=True,
     )
+    st.caption(
+        "Os sinais acima simulam uma camada de enriquecimento capaz de receber conectores reais como DataJud, diários oficiais e APIs parceiras."
+    )
 
 with tab3:
     st.subheader("Relações jurídicas e contexto relacional")
     st.plotly_chart(graph_figure, use_container_width=True)
     st.caption(
         "O grafo mostra o processo atual ligado a partes, classe, assunto, tribunal e casos historicamente semelhantes."
+    )
+    st.markdown("**Leitura técnica do grafo**")
+    st.markdown(
+        """
+        - O nó central representa o processo recebido.
+        - Nós auxiliares representam entidades canônicas e processos semelhantes.
+        - As arestas explicitam relações úteis para explicabilidade e navegação do histórico.
+        - Em uma fase seguinte, esta camada pode migrar para `Neo4j` ou outra base orientada a grafo.
+        """
     )
 
 with tab4:
@@ -118,13 +186,35 @@ with tab4:
         - **Alternativa parcelada:** `{artifacts.proposal.installment_count}x de R$ {artifacts.proposal.suggested_installment_value:,.2f}`
         """.replace(",", "X").replace(".", ",").replace("X", ".")
     )
+    st.markdown("**Racional do score**")
+    st.markdown(
+        """
+        O score atual é um baseline supervisionado sobre uma base controlada. Ele não substitui decisão jurídica,
+        mas organiza sinais de conciliabilidade em uma saída única para apoiar priorização e composição da proposta.
+        """
+    )
     st.markdown("**Principais fatores explicativos**")
     for driver in artifacts.proposal.top_drivers:
         st.write(f"- {driver}")
     st.markdown("**Justificativa técnica**")
     st.write(artifacts.proposal.narrative)
+    with st.expander("Lineagem da proposta e próximos passos"):
+        st.markdown(
+            """
+            **Como a proposta foi montada**
+            - o PDF define o contexto inicial do caso;
+            - o enriquecimento adiciona taxas históricas e comparáveis;
+            - o baseline estima chance de aceite;
+            - a proposta usa score + mediana de acordos semelhantes + valor da causa.
+
+            **Como evoluir**
+            - integrações reais com DataJud e diários;
+            - embeddings jurídicos para retrieval mais forte;
+            - features de grafo incorporadas ao modelo;
+            - agente explicador com output estruturado.
+            """
+        )
     st.info(
         "Este MVP usa base controlada e enriquecimento simulado para demonstrar a arquitetura proposta. "
         "O próximo passo é trocar os conectores simulados por integrações reais com fontes como DataJud, diários e APIs parceiras."
     )
-
