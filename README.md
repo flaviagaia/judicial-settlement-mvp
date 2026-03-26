@@ -346,6 +346,24 @@ Além da demo funcional, a interface foi desenhada para servir como artefato de 
 - grafo relacional;
 - racional da proposta e próximos passos de evolução.
 
+### Walkthrough visual da interface
+
+**1. Entrada do PDF, revisão manual e extração estruturada**
+
+![Tela 1](/Users/flaviagaia/Documents/CV_FLAVIA_CODEX/judicial-settlement-mvp/assets/proposta.jpg)
+
+**2. Enriquecimento externo, histórico comparável e features do score**
+
+![Tela 2](/Users/flaviagaia/Documents/CV_FLAVIA_CODEX/judicial-settlement-mvp/assets/proposta2.jpg)
+
+**3. Grafo relacional com processos semelhantes e hover explicativo**
+
+![Tela 3](/Users/flaviagaia/Documents/CV_FLAVIA_CODEX/judicial-settlement-mvp/assets/proposta3.jpg)
+
+**4. Proposta final com score, explicação e racional técnico**
+
+![Tela 4](/Users/flaviagaia/Documents/CV_FLAVIA_CODEX/judicial-settlement-mvp/assets/proposta4.jpg)
+
 ## Resultado demonstrado pelo MVP
 
 Na execução demo atual, o pipeline já entrega:
