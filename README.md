@@ -232,7 +232,7 @@ O baseline de aceite usa `Logistic Regression` com:
 - variáveis categóricas codificadas por `OneHotEncoder`;
 - variáveis numéricas padronizadas com `StandardScaler`.
 
-Features usadas:
+Features usadas diretamente no baseline:
 
 - classe;
 - assunto;
@@ -243,6 +243,9 @@ Features usadas:
 - proxy de dias em aberto;
 - proxy de audiência;
 - tentativa prévia de acordo;
+
+Sinais de enriquecimento usados no motor de proposta e na explicação, mas não no treino do baseline:
+
 - taxa histórica de acordo do réu;
 - taxa histórica de acordo do assunto;
 - taxa histórica de acordo da classe;
@@ -253,6 +256,7 @@ Esta escolha foi deliberada para o MVP:
 
 - é rápida de treinar e explicar;
 - funciona bem como baseline tabular;
+- evita dependência de sinais derivados do próprio target dentro do treino;
 - deixa claro onde entram futuras evoluções com `LightGBM`, `CatBoost` e features de grafo.
 
 ### Formulação do problema

@@ -43,6 +43,7 @@ def build_enrichment(case: ExtractedCase, history: pd.DataFrame, top_k: int = 5)
         by=["similarity", "agreement_accepted", "claim_value"],
         ascending=[False, False, True],
     ).head(top_k).reset_index(drop=True)
+    accepted_similar = similar_cases.loc[similar_cases["agreement_accepted"] == 1, "settlement_ratio"]
 
     defendant_history = enriched[enriched["defendant"] == case.defendant]
     subject_history = enriched[enriched["subject"] == case.subject]
@@ -109,11 +110,7 @@ def build_enrichment(case: ExtractedCase, history: pd.DataFrame, top_k: int = 5)
                 "similar_cases_acceptance_rate": similar_cases["agreement_accepted"].mean()
                 if not similar_cases.empty
                 else 0.0,
-                "median_settlement_ratio": similar_cases.loc[
-                    similar_cases["agreement_accepted"] == 1, "settlement_ratio"
-                ].median()
-                if not similar_cases.empty
-                else 0.0,
+                "median_settlement_ratio": float(accepted_similar.median()) if not accepted_similar.empty else 0.55,
             }
         ]
     )
@@ -124,4 +121,3 @@ def build_enrichment(case: ExtractedCase, history: pd.DataFrame, top_k: int = 5)
         external_snapshot=external_snapshot,
         feature_row=feature_row,
     )
-

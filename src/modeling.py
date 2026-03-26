@@ -22,7 +22,7 @@ class ProposalArtifacts:
     narrative: str
 
 
-FEATURE_COLUMNS = [
+MODEL_FEATURE_COLUMNS = [
     "case_class",
     "subject",
     "phase",
@@ -32,11 +32,6 @@ FEATURE_COLUMNS = [
     "days_open_proxy",
     "has_hearing_proxy",
     "prior_attempt_proxy",
-    "defendant_acceptance_rate",
-    "subject_acceptance_rate",
-    "class_acceptance_rate",
-    "similar_cases_acceptance_rate",
-    "median_settlement_ratio",
 ]
 
 
@@ -53,12 +48,8 @@ def train_acceptance_model(history: pd.DataFrame) -> Pipeline:
             "has_hearing",
             "prior_settlement_attempt",
             "agreement_accepted",
-            "settlement_ratio",
         ]
     ].copy()
-    features["defendant_acceptance_rate"] = history.groupby("defendant")["agreement_accepted"].transform("mean")
-    features["subject_acceptance_rate"] = history.groupby("subject")["agreement_accepted"].transform("mean")
-    features["class_acceptance_rate"] = history.groupby("case_class")["agreement_accepted"].transform("mean")
     features.rename(
         columns={
             "movements_count": "movements_count_proxy",
@@ -68,10 +59,8 @@ def train_acceptance_model(history: pd.DataFrame) -> Pipeline:
         },
         inplace=True,
     )
-    features["similar_cases_acceptance_rate"] = features["subject_acceptance_rate"]
-    features["median_settlement_ratio"] = history.groupby("subject")["settlement_ratio"].transform("median").fillna(0.0)
 
-    X = features[FEATURE_COLUMNS]
+    X = features[MODEL_FEATURE_COLUMNS]
     y = history["agreement_accepted"]
 
     preprocessor = ColumnTransformer(
@@ -90,11 +79,6 @@ def train_acceptance_model(history: pd.DataFrame) -> Pipeline:
                     "days_open_proxy",
                     "has_hearing_proxy",
                     "prior_attempt_proxy",
-                    "defendant_acceptance_rate",
-                    "subject_acceptance_rate",
-                    "class_acceptance_rate",
-                    "similar_cases_acceptance_rate",
-                    "median_settlement_ratio",
                 ],
             ),
         ]
@@ -112,7 +96,7 @@ def train_acceptance_model(history: pd.DataFrame) -> Pipeline:
 
 def build_proposal(case: ExtractedCase, feature_row: pd.DataFrame, history: pd.DataFrame) -> ProposalArtifacts:
     model = train_acceptance_model(history)
-    probability = float(model.predict_proba(feature_row[FEATURE_COLUMNS])[0, 1])
+    probability = float(model.predict_proba(feature_row[MODEL_FEATURE_COLUMNS])[0, 1])
 
     median_ratio = float(feature_row["median_settlement_ratio"].iloc[0] or 0.55)
     acceptance_anchor = float(feature_row["similar_cases_acceptance_rate"].iloc[0] or 0.5)
@@ -144,4 +128,3 @@ def build_proposal(case: ExtractedCase, feature_row: pd.DataFrame, history: pd.D
         top_drivers=top_drivers,
         narrative=narrative,
     )
-
