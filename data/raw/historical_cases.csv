@@ -1,0 +1,13 @@
+case_id,process_number,case_class,subject,court,court_division,plaintiff,defendant,phase,claim_value,has_hearing,days_open,movements_count,prior_settlement_attempt,agreement_accepted,settlement_value,settlement_ratio,source_mix
+H001,0823456-12.2023.8.19.0001,Procedimento Comum Cível,Cobrança indevida,TJRJ,5ª Vara Cível da Capital,Mariana Souza,Energia Leste S.A.,instrucao,12800.0,1,210,11,1,1,8400.0,0.656,datajud+publicacoes
+H002,0819191-44.2023.8.19.0001,Procedimento Comum Cível,Cobrança indevida,TJRJ,3ª Vara Cível da Capital,Carlos Ferreira,Energia Leste S.A.,saneamento,9700.0,1,180,9,0,1,6400.0,0.66,datajud+diario
+H003,0804545-92.2024.8.19.0001,Procedimento Comum Cível,Fatura contestada,TJRJ,7ª Vara Cível da Capital,Renata Costa,Energia Leste S.A.,conhecimento_inicial,5400.0,0,85,5,0,1,3500.0,0.648,datajud
+H004,0813131-88.2023.8.19.0002,Procedimento Comum Cível,Dano moral por negativacao,TJRJ,2ª Vara Cível de Niterói,Paulo Mendes,Financeira Atlântico S.A.,instrucao,22000.0,1,260,13,1,0,0.0,0.0,datajud+publicacoes
+H005,0809191-17.2022.8.19.0002,Procedimento Comum Cível,Dano moral por negativacao,TJRJ,4ª Vara Cível de Niterói,Julia Santos,Financeira Atlântico S.A.,execucao,18000.0,1,410,18,1,1,9800.0,0.544,datajud+diario+publicacoes
+H006,0811010-77.2024.8.19.0003,Juizado Especial Cível,Falha na prestacao de servico,TJRJ,1º JEC da Capital,Aline Ribeiro,Conecta Telecom S.A.,audiencia,6800.0,1,120,7,0,1,4300.0,0.632,datajud+publicacoes
+H007,0820000-21.2023.8.19.0003,Juizado Especial Cível,Falha na prestacao de servico,TJRJ,3º JEC da Capital,Diego Martins,Conecta Telecom S.A.,conhecimento_inicial,3900.0,0,70,4,0,1,2100.0,0.538,datajud
+H008,0814141-33.2023.8.19.0004,Juizado Especial Cível,Interrupcao de servico essencial,TJRJ,JEC de Duque de Caxias,Tatiane Lima,Energia Leste S.A.,audiencia,7600.0,1,140,8,1,1,4700.0,0.618,datajud+diario
+H009,0807070-91.2022.8.19.0004,Juizado Especial Cível,Interrupcao de servico essencial,TJRJ,JEC de Nova Iguaçu,Fabio Gomes,Energia Leste S.A.,execucao,11200.0,1,320,15,1,0,0.0,0.0,datajud+publicacoes
+H010,0826262-51.2024.8.19.0005,Procedimento Comum Cível,Negativacao indevida,TJRJ,1ª Vara Cível de São Gonçalo,Bruna Nascimento,Financeira Atlântico S.A.,conhecimento_inicial,14500.0,0,95,6,0,0,0.0,0.0,datajud
+H011,0818181-14.2023.8.19.0005,Procedimento Comum Cível,Negativacao indevida,TJRJ,2ª Vara Cível de São Gonçalo,Marcelo Dias,Financeira Atlântico S.A.,saneamento,16900.0,1,190,10,1,1,9700.0,0.574,datajud+diario
+H012,0803333-66.2024.8.19.0006,Juizado Especial Cível,Cobranca de servico nao contratado,TJRJ,JEC de Campo Grande,Helena Vieira,Conecta Telecom S.A.,conhecimento_inicial,5100.0,0,60,4,0,1,2800.0,0.549,datajud
