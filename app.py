@@ -72,6 +72,20 @@ with st.expander("Visão técnica da arquitetura", expanded=False):
         7. Geração de proposta à vista e parcelada com justificativa técnica.
         """
     )
+    st.markdown("**Ferramentas e técnicas usadas neste MVP**")
+    st.markdown(
+        """
+        - `Streamlit`: interface de demonstração e inspeção técnica.
+        - `reportlab`: geração de PDFs demo controlados.
+        - `pypdf`: leitura textual dos PDFs.
+        - `regex + parsing orientado a schema`: extração dos campos processuais.
+        - `pandas`: consolidação do caso, histórico e artefatos.
+        - `TF-IDF + cosine similarity`: recuperação de casos similares.
+        - `networkx`: modelagem do grafo relacional.
+        - `Plotly`: visualização do grafo no app.
+        - `scikit-learn`: pipeline baseline com `OneHotEncoder`, `StandardScaler` e `LogisticRegression`.
+        """
+    )
 
 with st.sidebar:
     st.subheader("Entrada do caso")
@@ -90,6 +104,16 @@ with st.sidebar:
         - Enriquecimento externo simulado, inspirado em conectores reais.
         - Grafo relacional para contexto e explicabilidade.
         - Modelo baseline tabular focado em legibilidade técnica.
+        """
+    )
+    st.markdown("**Evolução planejada da stack**")
+    st.markdown(
+        """
+        - OCR real com `PaddleOCR`, `PyMuPDF` e `pdfplumber`.
+        - Conectores para `DataJud`, diários oficiais e APIs parceiras.
+        - Busca vetorial com embeddings jurídicos.
+        - Baselines mais fortes com `LightGBM` ou `CatBoost`.
+        - Camada de agentes para enriquecimento, revisão e justificativa.
         """
     )
 
@@ -198,6 +222,15 @@ with tab2:
     st.caption(
         "Os sinais acima simulam uma camada de enriquecimento capaz de receber conectores reais como DataJud, diários oficiais e APIs parceiras."
     )
+    with st.expander("Técnicas aplicadas nesta camada"):
+        st.markdown(
+            """
+            - `Entity normalization`: normalização de réu, assunto e classe para consolidar comparáveis.
+            - `Weak enrichment`: sinais externos simulados para representar futura integração real.
+            - `Case-based retrieval`: ranking de comparáveis com base textual compacta.
+            - `Feature engineering`: geração de proxies de tramitação, hearing e tentativa prévia de acordo.
+            """
+        )
 
 with tab3:
     st.subheader("Relações jurídicas e contexto relacional")
@@ -212,6 +245,14 @@ with tab3:
         - Nós auxiliares representam entidades canônicas e processos semelhantes.
         - As arestas explicitam relações úteis para explicabilidade e navegação do histórico.
         - Em uma fase seguinte, esta camada pode migrar para `Neo4j` ou outra base orientada a grafo.
+        """
+    )
+    st.markdown("**Ferramentas desta camada**")
+    st.markdown(
+        """
+        - `networkx` para construção do grafo.
+        - `Plotly` para layout e visualização interativa.
+        - abordagem atual: grafo explicativo, não transacional.
         """
     )
 
@@ -230,6 +271,16 @@ with tab4:
         """
         O score atual é um baseline supervisionado sobre uma base controlada. Ele não substitui decisão jurídica,
         mas organiza sinais de conciliabilidade em uma saída única para apoiar priorização e composição da proposta.
+        """
+    )
+    st.markdown("**Técnicas do motor de decisão**")
+    st.markdown(
+        """
+        - `Logistic Regression` como baseline de classificação binária.
+        - `OneHotEncoder` para variáveis categóricas.
+        - `StandardScaler` para variáveis numéricas.
+        - heurística de proposta baseada em `median settlement ratio` dos comparáveis.
+        - separação entre sinais usados no treino e sinais usados apenas na explicação.
         """
     )
     st.markdown("**Principais fatores explicativos**")
